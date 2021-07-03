@@ -13,12 +13,6 @@
 /* Begin PBXFileReference section */
 		2FBBEAE508F335360078DB84 /* byte-cast.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "byte-cast.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58567A39242A0A0A00271066 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		58567A3C242A0A0A00271066 /* MattsOscsCinterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MattsOscsCinterface.h; sourceTree = "<group>"; };
-		58567A3D242A0A0A00271066 /* MattsOscs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MattsOscs.hpp; sourceTree = "<group>"; };
-		58567A3E242A0A0A00271066 /* MattsOscsCinterface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MattsOscsCinterface.cpp; sourceTree = "<group>"; };
-		58567A3F242A0A0A00271066 /* MattsOscs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MattsOscs.cpp; sourceTree = "<group>"; };
-		58567A40242A0A0A00271066 /* switch_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = switch_string.h; sourceTree = "<group>"; };
-		58567A41242A0A0A00271066 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = maxmspsdk.xcconfig; sourceTree = "<group>"; };
 		589B7F5E2691055100D386C4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,52 +35,22 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		583DCAC5242CB50400F108D5 /* utilities */ = {
-			isa = PBXGroup;
-			children = (
-				58567A40242A0A0A00271066 /* switch_string.h */,
-			);
-			path = utilities;
-			sourceTree = "<group>";
-		};
 		58567A37242A0A0A00271066 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				589B7F5E2691055100D386C4 /* Info.plist */,
 				5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */,
-				58567A38242A0A0A00271066 /* mymspextern */,
-				58567A3A242A0A0A00271066 /* mspcpp */,
+				58567A38242A0A0A00271066 /* src */,
 			);
 			path = src;
 			sourceTree = "<group>";
 		};
-		58567A38242A0A0A00271066 /* mymspextern */ = {
+		58567A38242A0A0A00271066 /* src */ = {
 			isa = PBXGroup;
 			children = (
 				58567A39242A0A0A00271066 /* main.c */,
 			);
-			path = mymspextern;
-			sourceTree = "<group>";
-		};
-		58567A3A242A0A0A00271066 /* mspcpp */ = {
-			isa = PBXGroup;
-			children = (
-				583DCAC5242CB50400F108D5 /* utilities */,
-				58567A3B242A0A0A00271066 /* cpp_files */,
-				58567A41242A0A0A00271066 /* main.c */,
-			);
-			path = mspcpp;
-			sourceTree = "<group>";
-		};
-		58567A3B242A0A0A00271066 /* cpp_files */ = {
-			isa = PBXGroup;
-			children = (
-				58567A3C242A0A0A00271066 /* MattsOscsCinterface.h */,
-				58567A3D242A0A0A00271066 /* MattsOscs.hpp */,
-				58567A3E242A0A0A00271066 /* MattsOscsCinterface.cpp */,
-				58567A3F242A0A0A00271066 /* MattsOscs.cpp */,
-			);
-			path = cpp_files;
+			path = src;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
