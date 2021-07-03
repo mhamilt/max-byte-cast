@@ -137,7 +137,7 @@
 			attributes = {
 				LastUpgradeCheck = 1130;
 			};
-			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "maxmsp-external-templates" */;
+			buildConfigurationList = 2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "byte-cast-macos" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -313,6 +313,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_PRIVATE_MODULE = NO;
 				COPY_PHASE_STRIP = NO;
+				DSTROOT = "$(HOME)/Documents/Max 8/externals";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
 				INFOPLIST_FILE = "max-sdk/source/Info.plist";
@@ -339,6 +340,7 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_PRIVATE_MODULE = NO;
 				COPY_PHASE_STRIP = YES;
+				DSTROOT = "$(HOME)/Documents/Max 8/externals";
 				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
 				INFOPLIST_FILE = "max-sdk/source/Info.plist";
 				OTHER_LDFLAGS = (
@@ -394,7 +396,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "maxmsp-external-templates" */ = {
+		2FBBEACF08F335010078DB84 /* Build configuration list for PBXProject "byte-cast-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2FBBEAD008F335010078DB84 /* Development */,
