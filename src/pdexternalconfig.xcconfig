@@ -1,0 +1,30 @@
+// Xcode target configuration settings for PD external
+//
+// Original tutorial archived here
+// https://web.archive.org/web/20151107060352/http://www.cooperbaker.com/Home/Code/Pd%20Xcode/Xcode%203.2.2%20Pd%20Tutorial/
+//
+// If a setting is not updating from this file, find it in Build Settings,
+// highlight and press delete
+
+// Change This Path to reflect your version of PD
+PD_PATH = /Applications/Pd-0.49-1.app/
+
+// Product details
+PRODUCT_NAME = mdeGranular~
+
+// Paths
+USER_HEADER_SEARCH_PATHS = $(PD_PATH)/Contents/Resources/src
+DSTROOT = $(PD_PATH)/Contents/Resources/extra/
+INSTALL_PATH = /
+
+// Linker Flags
+OTHER_LDFLAGS = -undefined dynamic_lookup
+ARCHS = i386 x86_64
+//ARCH_C_FLAGS = -march=core2 -mfpmath=sse -msse -msse2 -msse3
+//CFLAGS = $(ARCH_C_FLAGS)
+
+// Static Configuration (don't change these)
+DEPLOYMENT_LOCATION = YES
+SKIP_INSTALL = NO
+EXECUTABLE_PREFIX =
+EXECUTABLE_EXTENSION = d_fat

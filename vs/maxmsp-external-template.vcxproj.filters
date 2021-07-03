@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(C74SUPPORT)\max-includes\common\dllmain_win.c" />
+    <ClCompile Include="..\src\mymspextern\main.c">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{16aa4d3c-c1d0-44a4-9f3a-cefdd5739ffd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="max_extern_common.props" />
+  </ItemGroup>
+</Project>
