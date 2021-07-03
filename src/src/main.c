@@ -74,9 +74,6 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
     //--------------------------------------------------------------------------
     MaxExternalObject* maxObjectPtr = (MaxExternalObject*)object_alloc(myExternClass);
     //--------------------------------------------------------------------------
-    // inlet_new((t_object*)maxObjectPtr, "signal");
-    outlet_new((t_object*)maxObjectPtr, "signal");
-    //--------------------------------------------------------------------------
     maxObjectPtr->gain = 1.0;
     return maxObjectPtr;
 }
@@ -166,10 +163,28 @@ void onList(MaxExternalObject* maxObjectPtr,
             short argc,
             t_atom *argv)
 {
-    for (int i = 0; i < argc; ++i)
+    char text[100];
+    
+    int length = (argc >= 100) ? 99 : argc;
+    for (int i = 0; i < length; i++)
     {
-        atom_getfloatarg(i, argc, argv);
+        t_atom* ap = &argv[i];
+        switch (atom_gettype(ap))
+        {
+            case A_LONG:
+                text[i] = (char)(atom_getlong (ap) & 0xFF);
+                break;
+            case A_FLOAT:
+            case A_SYM:
+            default:
+                text[i] = '$';
+                break;
+        }
+        
     }
+    text[length] =  '\0';
+    
+    post("%s", text);
 }
 
 //------------------------------------------------------------------------------
