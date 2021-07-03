@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2FBBEAD608F335360078DB84"
-               BuildableName = "mymspextern~.mxo"
+               BuildableName = "byte-cast.mxo"
                BlueprintName = "max-external"
                ReferencedContainer = "container:byte-cast-macos.xcodeproj">
             </BuildableReference>
@@ -51,7 +51,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2FBBEAD608F335360078DB84"
-            BuildableName = "mymspextern~.mxo"
+            BuildableName = "byte-cast.mxo"
             BlueprintName = "max-external"
             ReferencedContainer = "container:byte-cast-macos.xcodeproj">
          </BuildableReference>

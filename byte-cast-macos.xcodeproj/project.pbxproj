@@ -8,14 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		58567A42242A0A0A00271066 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 58567A39242A0A0A00271066 /* main.c */; };
-		58567A49242A0A0A00271066 /* MattsOscsCinterface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58567A3E242A0A0A00271066 /* MattsOscsCinterface.cpp */; };
-		58567A4B242A0A0A00271066 /* MattsOscs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 58567A3F242A0A0A00271066 /* MattsOscs.cpp */; };
-		58567A4F242A0A0A00271066 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 58567A41242A0A0A00271066 /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2FBBEAE508F335360078DB84 /* mymspextern~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mymspextern~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
-		5848C4AB241B9E3500406164 /* mspcpp~.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "mspcpp~.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2FBBEAE508F335360078DB84 /* byte-cast.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "byte-cast.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58567A39242A0A0A00271066 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		58567A3C242A0A0A00271066 /* MattsOscsCinterface.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MattsOscsCinterface.h; sourceTree = "<group>"; };
 		58567A3D242A0A0A00271066 /* MattsOscs.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MattsOscs.hpp; sourceTree = "<group>"; };
@@ -24,6 +20,7 @@
 		58567A40242A0A0A00271066 /* switch_string.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = switch_string.h; sourceTree = "<group>"; };
 		58567A41242A0A0A00271066 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = maxmspsdk.xcconfig; sourceTree = "<group>"; };
+		589B7F5E2691055100D386C4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -39,8 +36,7 @@
 		19C28FB4FE9D528D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				2FBBEAE508F335360078DB84 /* mymspextern~.mxo */,
-				5848C4AB241B9E3500406164 /* mspcpp~.mxo */,
+				2FBBEAE508F335360078DB84 /* byte-cast.mxo */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -56,6 +52,7 @@
 		58567A37242A0A0A00271066 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				589B7F5E2691055100D386C4 /* Info.plist */,
 				5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */,
 				58567A38242A0A0A00271066 /* mymspextern */,
 				58567A3A242A0A0A00271066 /* mspcpp */,
@@ -109,24 +106,7 @@
 			);
 			name = "max-external";
 			productName = iterator;
-			productReference = 2FBBEAE508F335360078DB84 /* mymspextern~.mxo */;
-			productType = "com.apple.product-type.bundle";
-		};
-		5848C4A0241B9E3500406164 /* mspcpp~ */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 5848C4A8241B9E3500406164 /* Build configuration list for PBXNativeTarget "mspcpp~" */;
-			buildPhases = (
-				583DCAC6242CB76F00F108D5 /* ShellScript */,
-				5848C4A4241B9E3500406164 /* Sources */,
-				5848C4A7241B9E3500406164 /* Rez */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = "mspcpp~";
-			productName = iterator;
-			productReference = 5848C4AB241B9E3500406164 /* mspcpp~.mxo */;
+			productReference = 2FBBEAE508F335360078DB84 /* byte-cast.mxo */;
 			productType = "com.apple.product-type.bundle";
 		};
 /* End PBXNativeTarget section */
@@ -152,7 +132,6 @@
 			projectRoot = "";
 			targets = (
 				2FBBEAD608F335360078DB84 /* max-external */,
-				5848C4A0241B9E3500406164 /* mspcpp~ */,
 			);
 		};
 /* End PBXProject section */
@@ -165,33 +144,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		5848C4A7241B9E3500406164 /* Rez */ = {
-			isa = PBXRezBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		583DCAC6242CB76F00F108D5 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nif [[ ! \"$(ls -A max-sdk)\" ]]; then git submodule update --init;fi\n\n";
-		};
 		589FD427242A26FE00C7C9DC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -217,16 +172,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				58567A42242A0A0A00271066 /* main.c in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		5848C4A4241B9E3500406164 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				58567A4F242A0A0A00271066 /* main.c in Sources */,
-				58567A4B242A0A0A00271066 /* MattsOscs.cpp in Sources */,
-				58567A49242A0A0A00271066 /* MattsOscsCinterface.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,7 +261,6 @@
 				DSTROOT = "$(HOME)/Documents/Max 8/externals";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
-				INFOPLIST_FILE = "max-sdk/source/Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					MaxAudioAPI,
@@ -325,7 +269,6 @@
 					"$(C74_SYM_LINKER_FLAGS)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "mymspextern~";
 				SDKROOT = macosx;
 			};
 			name = Development;
@@ -342,7 +285,6 @@
 				COPY_PHASE_STRIP = YES;
 				DSTROOT = "$(HOME)/Documents/Max 8/externals";
 				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
-				INFOPLIST_FILE = "max-sdk/source/Info.plist";
 				OTHER_LDFLAGS = (
 					"-framework",
 					MaxAudioAPI,
@@ -351,44 +293,6 @@
 					"$(C74_SYM_LINKER_FLAGS)",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "mymspextern~";
-				SDKROOT = macosx;
-			};
-			name = Deployment;
-		};
-		5848C4A9241B9E3500406164 /* Development */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */;
-			buildSettings = {
-				C74_SYM_LINKER_FLAGS = "@$(C74SUPPORT)/max-includes/c74_linker_flags.txt\"";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COPY_PHASE_STRIP = NO;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
-				INFOPLIST_FILE = "max-sdk/source/Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-			};
-			name = Development;
-		};
-		5848C4AA241B9E3500406164 /* Deployment */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */;
-			buildSettings = {
-				C74_SYM_LINKER_FLAGS = "@$(C74SUPPORT)/max-includes/c74_linker_flags.txt\"";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COPY_PHASE_STRIP = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
-				INFOPLIST_FILE = "max-sdk/source/Info.plist";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
 			};
 			name = Deployment;
@@ -410,15 +314,6 @@
 			buildConfigurations = (
 				2FBBEAE108F335360078DB84 /* Development */,
 				2FBBEAE208F335360078DB84 /* Deployment */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Development;
-		};
-		5848C4A8241B9E3500406164 /* Build configuration list for PBXNativeTarget "mspcpp~" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				5848C4A9241B9E3500406164 /* Development */,
-				5848C4AA241B9E3500406164 /* Deployment */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Development;

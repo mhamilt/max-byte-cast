@@ -10,7 +10,7 @@
 
 
 // Name & Version
-PRODUCT_NAME = $(PROJECT_NAME)
+PRODUCT_NAME = byte-cast
 //PRODUCT_VERSION = 7.0.3
 PRODUCT_VERSION = 7.1.0
 //PRODUCT_VERSION = 7.3.3
@@ -29,7 +29,7 @@ INSTALL_PATH = ./
 
 // Special Files
 GCC_PREFIX_HEADER = $(C74SUPPORT)/max-includes/macho-prefix.pch
-INFOPLIST_FILE = max-sdk/source/Info.plist
+INFOPLIST_FILE = src/Info.plist
 
 
 // Architecture and Deployment
