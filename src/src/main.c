@@ -7,7 +7,6 @@
  */
 #include "ext.h"
 #include "ext_obex.h"
-#include "z_dsp.h"
 #include "buffer.h"
 //------------------------------------------------------------------------------
 
@@ -18,20 +17,13 @@
 void* myExternClass;
 
 //------------------------------------------------------------------------------
-/// DSP object properties
-typedef struct _MyDspStruct
-{
-    float a;
-} MyDspStruct;
-
 /** @struct
  The MaxMSP object
  */
 typedef struct _MaxExternalObject
 {
-    t_pxobject x_obj;
+    t_object x_obj;
     t_symbol* x_arrayname;
-    MyDspStruct a;
     short inletConnection;
     double gain;
 } MaxExternalObject;
@@ -40,16 +32,47 @@ typedef struct _MaxExternalObject
 /// Arguement list should be as long as the list of type arguments passed in the class_new call below.
 /// @param arg1 first argument to object: should match type given in class_new(...)
 /// @returns a void* to an instance of the MaxExternalObject
-void* myExternalConstructor(long arg1)
+void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 {
+    // Define Functionality
+    //
+    // If argc == 1:
+    //      if argv[0] == 's' then greedily spit out a symbol
+    // outside of that, use standard printf fmt for data
+    // If argc > 1:
+    // i     32-bit int
+    // u     32-bit uint
+    // h     16-bit int
+    // uh    16-bit uint
+    // f     32-bit float
+    // d     64-bit float (double)
+    // c     8-bit Character
+    // s     string until \0
+    // xxxs  string where xxx is the number of characters
     //--------------------------------------------------------------------------
-    if (!arg1)
+    post("%d Arguments", argc);
+
+    if (argc)
     {
-        post("no arguement\n");
+        t_atom* ap = &argv[argc-1];
+        switch (atom_gettype(ap))
+        {
+            case A_LONG:
+                post("%ld", atom_getlong (ap));
+                break;
+            case A_FLOAT:
+                post("%.2f", atom_getfloat(ap));
+                break;
+            case A_SYM:
+                post("%s", atom_getsym(ap)->s_name);
+                break;
+            default:
+                post("unknown atom type (%ld)", atom_gettype(ap));
+                break;
+        }
     }
     //--------------------------------------------------------------------------
     MaxExternalObject* maxObjectPtr = (MaxExternalObject*)object_alloc(myExternClass);
-    dsp_setup((t_pxobject*)maxObjectPtr, 1);
     //--------------------------------------------------------------------------
     // inlet_new((t_object*)maxObjectPtr, "signal");
     outlet_new((t_object*)maxObjectPtr, "signal");
@@ -63,7 +86,6 @@ void* myExternalConstructor(long arg1)
 void myExternDestructor(MaxExternalObject* maxObjectPtr)
 {
     post("END");
-    dsp_free((t_pxobject*)maxObjectPtr);
 }
 //------------------------------------------------------------------------------
 
@@ -80,12 +102,14 @@ void inletAssistant(MaxExternalObject* maxObjectPtr,
                     long arg,
                     char *dstString)
 {
-    const long  inletMessage = 1;
-    const long outletMessage = 2;
+    typedef enum _InletAssistantType {
+        INLET = 1,
+        OUTLET = 2,
+    } InletAssistantType;
     
-    switch (message)
+    switch ((InletAssistantType)message)
     {
-        case 1: // inletMessage
+        case INLET: // inletMessage
             switch (arg)
             {
                 case 0:
@@ -98,7 +122,7 @@ void inletAssistant(MaxExternalObject* maxObjectPtr,
                     sprintf(dstString, "some other inlet");
             }
             break;
-        case 2:  // outletMessage
+        case OUTLET:  // outletMessage
             switch (arg)
             {
                 case 0:
@@ -114,68 +138,6 @@ void inletAssistant(MaxExternalObject* maxObjectPtr,
     }
 }
 
-//------------------------------------------------------------------------------
-#pragma mark DSP Loop
-/// Main DSP process block, do your DSP here
-/// @param maxObjectPtr
-/// @param dsp64
-/// @param ins double pointer array to sample inlets
-/// @param numins
-/// @param outs double pointer array to sample outlets
-/// @param numouts
-/// @param sampleframes samples per channel
-/// @param flags
-/// @param userparam no idea
-void mspExternalProcessBlock(MaxExternalObject* maxObjectPtr, t_object* dsp64,
-                             double** ins, long numins, double** outs, long numouts,
-                             long sampleframes, long flags, void* userparam)
-
-{
-    //--------------------------------------------------------------------------
-    // pass through
-    double* in = ins[0];
-    
-    if(!maxObjectPtr->inletConnection)
-    {
-        for (int s = 0; s < sampleframes; ++s)
-        {
-            in[s] = 0.0;
-        }
-    }
-    
-    //--------------------------------------------------------------------------
-    // DSP loops
-    
-    for (int s = 0; s < sampleframes; ++s)
-    {
-        outs[0][s] = tanh(in[s] * maxObjectPtr->gain);
-    }
-    for (int i = 1; i < numouts; ++i)
-    {
-        outs[i] = outs[0];
-    }
-}
-//------------------------------------------------------------------------------
-
-/// Audio DSP setup
-/// @param maxObjectPtr object pointer
-/// @param dsp64
-/// @param count array containing number of connections to an inlet with index [i]
-/// @param samplerate
-/// @param vectorsize
-/// @param flags
-void prepareToPlay(MaxExternalObject* maxObjectPtr, t_object* dsp64, short* count,
-                   double samplerate, long vectorsize, long flags)
-{
-    maxObjectPtr->inletConnection = count[0];
-    
-    object_method(dsp64,
-                  gensym("dsp_add64"),
-                  maxObjectPtr,
-                  mspExternalProcessBlock,
-                  0,
-                  NULL);
-}
 //------------------------------------------------------------------------------
 
 /// This gets called when we receive a bang
@@ -242,23 +204,20 @@ void coupleMethodsToExternal( t_class* c)
     class_addmethod(c, (method)inletAssistant,"assist", A_CANT,0);
     class_addmethod(c, (method)onPrintMessage, "print", 0);
     class_addmethod(c, (method)onAnyMessage, "anything", A_GIMME, 0);
-    class_addmethod(c, (method)prepareToPlay, "dsp64", A_CANT, 0);
 }
 //------------------------------------------------------------------------------
 int C74_EXPORT main(void)
 {
-    post("hello");
-    t_class* c = class_new("mymspextern~",
+    t_class* c = class_new("byte-cast",
                            (method)myExternalConstructor,
                            (method)myExternDestructor,
                            (short)sizeof(MaxExternalObject),
                            0L,
-                           A_DEFLONG,
+                           A_GIMME,
                            0);
     
     coupleMethodsToExternal(c);
     
-    class_dspinit(c);
     class_register(CLASS_BOX, c);
     
     myExternClass = c;
