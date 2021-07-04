@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml-stylesheet href="./_c74_ref.xsl" type="text/xsl"?>
+<c74object name="byte-cast">
+  <digest>For casting a list of byte dat</digest>
+  <description>Max Object to cast a list of byte data such as that received from Arduino serial comms or Bluetooth Low Energy devices</description>
+
+  <metadatalist>
+    <metadata name="author">Matthew Hamilton</metadata>
+    <metadata name="tag">serial</metadata>
+    <metadata name="tag">data</metadata>
+    <metadata name="tag">byte</metadata>
+  </metadatalist>
+
+  <objarglist>
+    <objarg name='format' optional='1' type='number'>
+      <digest>Output Types</digest>
+      <description>The number of arguments determines the number of outlets. Each outlet decodes a list of bytes as either 16-bit 32-bit signed or unsigned int, 32-bit or 64-bit float or symbol.
+        <br/>
+        Decoding method is identified by symbol arguments (h, i, f, or s) similar to C format strings.
+        <br/>
+        Modifiers can be used to dictate endianess ('<' little, `>` big) and signing ('u' for unsigned). e.g. `uh>` is an unsigned 16-bit int in big-endian order.
+      </description>
+    </objarg>
+  </objarglist>
+
+  <inletlist>
+    <inlet id="0" type="list">
+      <digest></digest>
+      <description></description>
+    </inlet>
+  </inletlist>
+
+  <outletlist>
+    <outlet id="0" type="list">
+      <digest></digest>
+      <description></description>
+    </outlet>
+  </outletlist>
+
+</c74object>

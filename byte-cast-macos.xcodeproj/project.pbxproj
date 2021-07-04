@@ -8,12 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		58567A42242A0A0A00271066 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 58567A39242A0A0A00271066 /* main.c */; };
+		588B520A2691E75B00935F2C /* byte-cast.c in Sources */ = {isa = PBXBuildFile; fileRef = 588B52082691E75B00935F2C /* byte-cast.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2FBBEAE508F335360078DB84 /* byte-cast.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "byte-cast.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
 		58567A39242A0A0A00271066 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = maxmspsdk.xcconfig; sourceTree = "<group>"; };
+		588B52082691E75B00935F2C /* byte-cast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "byte-cast.c"; sourceTree = "<group>"; };
+		588B52092691E75B00935F2C /* byte-cast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "byte-cast.h"; sourceTree = "<group>"; };
 		589B7F5E2691055100D386C4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -49,6 +52,8 @@
 			isa = PBXGroup;
 			children = (
 				58567A39242A0A0A00271066 /* main.c */,
+				588B52082691E75B00935F2C /* byte-cast.c */,
+				588B52092691E75B00935F2C /* byte-cast.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -135,6 +140,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				588B520A2691E75B00935F2C /* byte-cast.c in Sources */,
 				58567A42242A0A0A00271066 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

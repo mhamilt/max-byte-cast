@@ -8,6 +8,7 @@
 #include "ext.h"
 #include "ext_obex.h"
 #include "buffer.h"
+#include "byte-cast.h"
 //------------------------------------------------------------------------------
 
 /// void* to the complete new Max External class so that it can be used in the class methods
@@ -22,11 +23,45 @@ void* myExternClass;
  */
 typedef struct _MaxExternalObject
 {
-    t_object x_obj;
+    t_object  x_obj;
     t_symbol* x_arrayname;
-    short inletConnection;
+    t_atom* textOutput;
+    void*  mainOutlet;
+    short  inletConnection;
     double gain;
+    e_max_atomtypes outletType;
+    
 } MaxExternalObject;
+
+void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *argv)
+{
+    if (argc)
+    {
+        t_atom* argument = &argv[0];
+        t_symbol* outletType = atom_getsym(argument);
+        
+        if (outletType == gensym("s"))
+        {
+            maxObjectPtr->outletType = A_SYM;
+            maxObjectPtr->mainOutlet = outlet_new(maxObjectPtr, NULL);
+        }
+        else if (outletType == gensym("f"))
+        {
+            maxObjectPtr->outletType = A_FLOAT;
+            maxObjectPtr->mainOutlet = floatout(maxObjectPtr);
+        }
+        else if (outletType == gensym("i"))
+        {
+            maxObjectPtr->outletType = A_LONG;
+            maxObjectPtr->mainOutlet = intout(maxObjectPtr);
+        }
+        else
+        {
+            post("not a valid type");
+            maxObjectPtr->outletType = A_NOTHING;
+        }
+    }
+}
 //------------------------------------------------------------------------------
 /// External Object Constructor: use this to setup any variables / properties of your DSP Struct or MaxExternalObject
 /// Arguement list should be as long as the list of type arguments passed in the class_new call below.
@@ -34,6 +69,8 @@ typedef struct _MaxExternalObject
 /// @returns a void* to an instance of the MaxExternalObject
 void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 {
+    
+    
     // Define Functionality
     //
     // If argc == 1:
@@ -50,31 +87,18 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
     // s     string until \0
     // xxxs  string where xxx is the number of characters
     //--------------------------------------------------------------------------
-    post("%d Arguments", argc);
-
-    if (argc)
-    {
-        t_atom* ap = &argv[argc-1];
-        switch (atom_gettype(ap))
-        {
-            case A_LONG:
-                post("%ld", atom_getlong (ap));
-                break;
-            case A_FLOAT:
-                post("%.2f", atom_getfloat(ap));
-                break;
-            case A_SYM:
-                post("%s", atom_getsym(ap)->s_name);
-                break;
-            default:
-                post("unknown atom type (%ld)", atom_gettype(ap));
-                break;
-        }
-    }
-    //--------------------------------------------------------------------------
     MaxExternalObject* maxObjectPtr = (MaxExternalObject*)object_alloc(myExternClass);
+    
+    long numAllocatedAtoms;
+    char memoryWasAllocated;
+    
+    atom_alloc(&numAllocatedAtoms,
+               &(maxObjectPtr->textOutput),
+               &memoryWasAllocated);
+    
+    setMaxObjectOutletType(maxObjectPtr, argc, argv);
     //--------------------------------------------------------------------------
-    maxObjectPtr->gain = 1.0;
+    
     return maxObjectPtr;
 }
 
@@ -82,7 +106,6 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 /// @brief what happens when the object is deleted
 void myExternDestructor(MaxExternalObject* maxObjectPtr)
 {
-    post("END");
 }
 //------------------------------------------------------------------------------
 
@@ -163,28 +186,21 @@ void onList(MaxExternalObject* maxObjectPtr,
             short argc,
             t_atom *argv)
 {
-    char text[100];
-    
-    int length = (argc >= 100) ? 99 : argc;
-    for (int i = 0; i < length; i++)
+    switch (maxObjectPtr->outletType)
     {
-        t_atom* ap = &argv[i];
-        switch (atom_gettype(ap))
-        {
-            case A_LONG:
-                text[i] = (char)(atom_getlong (ap) & 0xFF);
-                break;
-            case A_FLOAT:
-            case A_SYM:
-            default:
-                text[i] = '$';
-                break;
-        }
-        
+        case A_LONG:
+            outlet_int(maxObjectPtr->mainOutlet, bytesToInt(argc, argv));
+            break;
+        case A_FLOAT:
+            outlet_float(maxObjectPtr->mainOutlet, bytesToFloat(argc, argv, false));
+            break;
+        case A_SYM:
+            outlet_anything(maxObjectPtr->mainOutlet, bytesToSymbol(argc, argv), 0, NULL);
+            break;
+        default:
+            break;
     }
-    text[length] =  '\0';
     
-    post("%s", text);
 }
 
 //------------------------------------------------------------------------------
