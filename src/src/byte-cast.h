@@ -69,8 +69,6 @@ int64_t  bytesToInt    (short argc, t_atom* argv, bool littleEndian)
             bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
     }
     
-    short numBytes = ((argc / 2) * 2);
-    
     switch (numBytes)
     {
         case 2:
