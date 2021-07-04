@@ -55,15 +55,17 @@ int64_t  bytesToInt    (short argc, t_atom* argv, bool littleEndian)
 {
     uint8_t bytes[8];
     int64_t outputValue;
+    short numBytes = ((argc / 2) * 2);
+    numBytes = (numBytes > 8) ? 8 : numBytes;
     
     if (littleEndian)
     {
-        for (int i = 0; i < argc; ++i)
+        for (int i = 0; i < numBytes; ++i)
             bytes[i] =  (uint8_t)(atom_getlong (argv + i) & 0xFF);
     }
     else
     {
-        for (int i = 0; i < argc; ++i)
+        for (int i = 0; i < numBytes; ++i)
             bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
     }
     
@@ -93,17 +95,20 @@ uint64_t  bytesToUInt    (short argc, t_atom* argv, bool littleEndian)
 {
     uint8_t bytes[8];
     uint64_t outputValue;
+    short numBytes = ((argc / 2) * 2);
+    numBytes = (numBytes > 8) ? 8 : numBytes;
+    
     if (littleEndian)
     {
-        for (int i = 0; i < argc; ++i)
+        for (int i = 0; i < numBytes; ++i)
             bytes[i] =  (uint8_t)(atom_getlong (argv + i) & 0xFF);
     }
     else
     {
-        for (int i = 0; i < argc; ++i)
+        for (int i = 0; i < numBytes; ++i)
             bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
     }
-    short numBytes = ((argc / 2) * 2);
+    
     
     switch (numBytes)
     {
