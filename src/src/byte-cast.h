@@ -50,12 +50,21 @@ t_symbol* bytesToSymbol(short argc, t_atom* argv)
 /// <#Description#>
 /// @param argc <#argc description#>
 /// @param argv <#argv description#>
-int64_t  bytesToInt    (short argc, t_atom* argv)
+int64_t  bytesToInt    (short argc, t_atom* argv, bool littleEndian)
 {
     uint8_t bytes[8];
     int64_t outputValue;
-    for (int i = 0; i < argc; ++i)
-        bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
+    
+    if (littleEndian)
+    {
+        for (int i = 0; i < argc; ++i)
+            bytes[i] =  (uint8_t)(atom_getlong (argv + i) & 0xFF);
+    }
+    else
+    {
+        for (int i = 0; i < argc; ++i)
+            bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
+    }
     
     switch (argc)
     {

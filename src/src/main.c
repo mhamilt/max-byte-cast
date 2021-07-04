@@ -189,7 +189,7 @@ void onList(MaxExternalObject* maxObjectPtr,
     switch (maxObjectPtr->outletType)
     {
         case A_LONG:
-            outlet_int(maxObjectPtr->mainOutlet, bytesToInt(argc, argv));
+            outlet_int(maxObjectPtr->mainOutlet, bytesToInt(argc, argv, false));
             break;
         case A_FLOAT:
             outlet_float(maxObjectPtr->mainOutlet, bytesToFloat(argc, argv, false));
