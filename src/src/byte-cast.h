@@ -47,9 +47,10 @@ t_symbol* bytesToSymbol(short argc, t_atom* argv)
     return gensym(text);
 }
 //------------------------------------------------------------------------------
-/// <#Description#>
-/// @param argc <#argc description#>
+/// /// decode list of t_atom_long to an unsigned int
+/// @param argc number of bytes: rounded down to closest power of two and extra bytes discarded
 /// @param argv <#argv description#>
+/// @param littleEndian flag endianness true for little, false for big
 int64_t  bytesToInt    (short argc, t_atom* argv, bool littleEndian)
 {
     uint8_t bytes[8];
@@ -66,7 +67,9 @@ int64_t  bytesToInt    (short argc, t_atom* argv, bool littleEndian)
             bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
     }
     
-    switch (argc)
+    short numBytes = ((argc / 2) * 2);
+    
+    switch (numBytes)
     {
         case 2:
             outputValue = *(int16_t*)bytes;
@@ -82,17 +85,27 @@ int64_t  bytesToInt    (short argc, t_atom* argv, bool littleEndian)
     return outputValue;
 }
 //------------------------------------------------------------------------------
-/// <#Description#>
-/// @param argc <#argc description#>
+/// decode list of t_atom_long to an unsigned int
+/// @param argc number of bytes: rounded down to closest power of two and extra bytes discarded
 /// @param argv <#argv description#>
-uint64_t  bytesToUInt    (short argc, t_atom* argv)
+/// @param littleEndian flag endianness true for little, false for big
+uint64_t  bytesToUInt    (short argc, t_atom* argv, bool littleEndian)
 {
     uint8_t bytes[8];
     uint64_t outputValue;
-    for (int i = 0; i < argc; ++i)
-        bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
+    if (littleEndian)
+    {
+        for (int i = 0; i < argc; ++i)
+            bytes[i] =  (uint8_t)(atom_getlong (argv + i) & 0xFF);
+    }
+    else
+    {
+        for (int i = 0; i < argc; ++i)
+            bytes[i] =  (uint8_t)(atom_getlong (argv + (argc - 1) - i) & 0xFF);
+    }
+    short numBytes = ((argc / 2) * 2);
     
-    switch (argc)
+    switch (numBytes)
     {
         case 2:
             outputValue = *(uint16_t*)bytes;
