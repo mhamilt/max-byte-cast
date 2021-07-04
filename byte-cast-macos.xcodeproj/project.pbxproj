@@ -68,6 +68,7 @@
 				589FD427242A26FE00C7C9DC /* ShellScript */,
 				2FBBEADA08F335360078DB84 /* Sources */,
 				2FBBEADF08F335360078DB84 /* Rez */,
+				588B520B2692619700935F2C /* Post Script */,
 			);
 			buildRules = (
 			);
@@ -116,6 +117,24 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		588B520B2692619700935F2C /* Post Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Post Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "codesign --force --deep -s \"Developer ID Application: Matthew Hamilton (XZ388CS8AV)\" \"${DSTROOT}/${WRAPPER_NAME}\"\ncd \"${DSTROOT}/../../\"\nzip -r byte-cast.zip byte-cast -x \"*.DS_Store\"\ncp -r \"${DSTROOT}/../../byte-cast\" \"${HOME}/Documents/Max 8/Packages\"\n";
+		};
 		589FD427242A26FE00C7C9DC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -228,7 +247,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_PRIVATE_MODULE = NO;
 				COPY_PHASE_STRIP = NO;
-				DSTROOT = "$(HOME)/Documents/Max 8/externals";
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
 				OTHER_LDFLAGS = (
@@ -253,7 +271,6 @@
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_PRIVATE_MODULE = NO;
 				COPY_PHASE_STRIP = YES;
-				DSTROOT = "$(HOME)/Documents/Max 8/externals";
 				GCC_PREFIX_HEADER = "$(C74SUPPORT)/max-includes/macho-prefix.pch";
 				OTHER_LDFLAGS = (
 					"-framework",

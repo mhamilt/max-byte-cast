@@ -1,9 +1,27 @@
 /*
- A template for a basic max external object with more explicit documentation
+ Byte-cast: casting data in max msp
  
- See Readme of repository for build instructions.
- Create an Issue on the repository if anything is amiss or you have any suggestion
- - mhamilt Mar 2020
+ Define Functionality:
+ 
+     If argc == 1:
+        if argv[0] == 's' then greedily spit out a symbol
+        outside of that, use standard printf fmt for data
+     If argc > 1:
+         i     32-bit int
+         h     16-bit int
+         f     32-bit float
+         d     64-bit float (double)
+         c     8-bit character
+         s     string until \0
+         sxxx  string where xxx is the number of characters
+ 
+    Modifiers:
+         u   unsigned      (prepend)
+         >   Big endian    (append)
+         <   Little endian (append)
+            
+        (e.g. uh< unsigned 16-bit int little endian)
+        
  */
 #include "ext.h"
 #include "ext_obex.h"
@@ -69,23 +87,6 @@ void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *
 /// @returns a void* to an instance of the MaxExternalObject
 void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 {
-    
-    
-    // Define Functionality
-    //
-    // If argc == 1:
-    //      if argv[0] == 's' then greedily spit out a symbol
-    // outside of that, use standard printf fmt for data
-    // If argc > 1:
-    // i     32-bit int
-    // u     32-bit uint
-    // h     16-bit int
-    // uh    16-bit uint
-    // f     32-bit float
-    // d     64-bit float (double)
-    // c     8-bit Character
-    // s     string until \0
-    // xxxs  string where xxx is the number of characters
     //--------------------------------------------------------------------------
     MaxExternalObject* maxObjectPtr = (MaxExternalObject*)object_alloc(myExternClass);
     
@@ -200,7 +201,6 @@ void onList(MaxExternalObject* maxObjectPtr,
         default:
             break;
     }
-    
 }
 
 //------------------------------------------------------------------------------
