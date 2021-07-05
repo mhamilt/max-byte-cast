@@ -35,8 +35,10 @@
 /// myExternClass = c;
 void* myExternClass;
 
+///
 typedef enum _OutletDataType
 {
+    BYTE_OUT,
     INT16_OUT,
     UINT16_OUT,
     INT32_OUT,
@@ -170,6 +172,9 @@ void onFloat(MaxExternalObject* maxObjectPtr, double floatIn)
     maxObjectPtr->gain = floatIn;
 }
 
+
+
+
 //------------------------------------------------------------------------------
 
 /// This gets called when a list is sent to the object
@@ -229,6 +234,13 @@ void onList(MaxExternalObject* maxObjectPtr,
             numAtoms++;
             break;
             
+        case BYTE_OUT:
+            for (int i = 0; i < argc; ++i)
+            {
+                atom_setlong(maxObjectPtr->atomList + i, atom_getlong(argv + i));
+                numAtoms++;
+            }
+            break;
         default:
             break;
     }
@@ -236,6 +248,19 @@ void onList(MaxExternalObject* maxObjectPtr,
     
     
     outlet_list(maxObjectPtr->mainOutlet, NULL, numAtoms, maxObjectPtr->atomList);
+}
+
+void onInt (MaxExternalObject* maxObjectPtr, t_atom_long intIn)
+{
+    uint8_t* bytes = (uint8_t*)&intIn;
+    t_atom byteAtoms[8];
+    
+    for (int i = 0; i < 8; ++i)
+    {
+        t_atom_long byteAsLong = (t_atom_long)bytes[i];
+        atom_setlong(byteAtoms + i, byteAsLong);
+    }
+    onList(maxObjectPtr, NULL, 8, byteAtoms);
 }
 
 //------------------------------------------------------------------------------
@@ -271,6 +296,7 @@ void coupleMethodsToExternal( t_class* c)
     class_addmethod(c, (method)onBang, "bang", 0);
     class_addmethod(c, (method)onList, "list", A_GIMME, 0);
     class_addmethod(c, (method)onFloat, "float", A_FLOAT, 0);
+    class_addmethod(c, (method)onInt, "int", A_LONG, 0);
     class_addmethod(c, (method)inletAssistant,"assist", A_CANT,0);
     class_addmethod(c, (method)onPrintMessage, "print", 0);
     class_addmethod(c, (method)onAnyMessage, "anything", A_GIMME, 0);
@@ -316,15 +342,17 @@ void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *
             isUnsigned = true;
             currIndex++;
         }
-                
-            if(argumentString[currIndex] == 'i')
-                maxObjectPtr->outletType = (isUnsigned)?UINT32_OUT:INT32_OUT;
-            else if (argumentString[currIndex] == 'h')
-                maxObjectPtr->outletType = (isUnsigned)?UINT16_OUT:INT16_OUT;
-            else if(argumentString[currIndex] == 'f')
-                maxObjectPtr->outletType = FLOAT_OUT;
-            else if(argumentString[currIndex] == 's')
-                maxObjectPtr->outletType = STRING_OUT;
+        
+        if(argumentString[currIndex] == 'i')
+            maxObjectPtr->outletType = (isUnsigned)?UINT32_OUT:INT32_OUT;
+        else if (argumentString[currIndex] == 'h')
+            maxObjectPtr->outletType = (isUnsigned)?UINT16_OUT:INT16_OUT;
+        else if(argumentString[currIndex] == 'f')
+            maxObjectPtr->outletType = FLOAT_OUT;
+        else if(argumentString[currIndex] == 's')
+            maxObjectPtr->outletType = STRING_OUT;
+        else if(argumentString[currIndex] == 'b')
+            maxObjectPtr->outletType = BYTE_OUT;
         
         currIndex++;
         
