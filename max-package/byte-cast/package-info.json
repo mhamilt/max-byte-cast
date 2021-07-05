@@ -23,7 +23,7 @@
     "copyright": "GNU General Public License v3.0"
   },
   "filelist": {
-    "examples": ["byte-cast-example.maxpat"],
+    "examples": ["byte-cast.maxpat"],
     "externals": ["byte-cast.mxo", "byte-cast.mxe", "byte-cast.mxe64"],
     "help": ["byte-cast.maxhelp"],
     "extras": [],

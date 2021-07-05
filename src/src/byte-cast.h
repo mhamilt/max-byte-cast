@@ -139,7 +139,7 @@ float bytesToFloat  (short argc, t_atom* argv, bool littleEndian)
     else
     {
         for (int i = 0 ; i < 4; ++i)
-            bytes[3 - i] = (atom_getlong (argv + i) & 0xFF);
+            bytes[i] = (atom_getlong (argv + (argc - 1) - i) & 0xFF);
     }
     return *((float*)bytes);
 }

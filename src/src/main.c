@@ -3,25 +3,25 @@
  
  Define Functionality:
  
-     If argc == 1:
-        if argv[0] == 's' then greedily spit out a symbol
-        outside of that, use standard printf fmt for data
-     If argc > 1:
-         i     32-bit int
-         h     16-bit int
-         f     32-bit float
-         d     64-bit float (double)
-         c     8-bit character
-         s     string until \0
-         sxxx  string where xxx is the number of characters
+ If argc == 1:
+ if argv[0] == 's' then greedily spit out a symbol
+ outside of that, use standard printf fmt for data
+ If argc > 1:
+ i     32-bit int
+ h     16-bit int
+ f     32-bit float
+ d     64-bit float (double)
+ c     8-bit character
+ s     string until \0
+ sxxx  string where xxx is the number of characters
  
-    Modifiers:
-         u   unsigned      (prepend)
-         >   Big endian    (append)
-         <   Little endian (append)
-            
-        (e.g. uh< unsigned 16-bit int little endian)
-        
+ Modifiers:
+ u   unsigned      (prepend)
+ >   Big endian    (append)
+ <   Little endian (append)
+ 
+ (e.g. uh< unsigned 16-bit int little endian)
+ 
  */
 #include "ext.h"
 #include "ext_obex.h"
@@ -43,11 +43,13 @@ typedef struct _MaxExternalObject
 {
     t_object  x_obj;
     t_symbol* x_arrayname;
-    t_atom* textOutput;
+    t_atom* atomList;
+    size_t atomListSize;
     void*  mainOutlet;
     short  inletConnection;
     double gain;
     e_max_atomtypes outletType;
+    bool isLittleEndian;
     
 } MaxExternalObject;
 
@@ -61,23 +63,22 @@ void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *
         if (outletType == gensym("s"))
         {
             maxObjectPtr->outletType = A_SYM;
-            maxObjectPtr->mainOutlet = outlet_new(maxObjectPtr, NULL);
         }
         else if (outletType == gensym("f"))
         {
             maxObjectPtr->outletType = A_FLOAT;
-            maxObjectPtr->mainOutlet = floatout(maxObjectPtr);
         }
         else if (outletType == gensym("i"))
         {
             maxObjectPtr->outletType = A_LONG;
-            maxObjectPtr->mainOutlet = intout(maxObjectPtr);
         }
         else
         {
             post("not a valid type");
             maxObjectPtr->outletType = A_NOTHING;
         }
+        maxObjectPtr->mainOutlet = listout(maxObjectPtr);
+
     }
 }
 //------------------------------------------------------------------------------
@@ -89,13 +90,18 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 {
     //--------------------------------------------------------------------------
     MaxExternalObject* maxObjectPtr = (MaxExternalObject*)object_alloc(myExternClass);
-    
+    maxObjectPtr->atomList = NULL;
+    maxObjectPtr->atomListSize = 100;
+    maxObjectPtr->isLittleEndian = false;
+
     long numAllocatedAtoms;
     char memoryWasAllocated;
     
-    atom_alloc(&numAllocatedAtoms,
-               &(maxObjectPtr->textOutput),
-               &memoryWasAllocated);
+    atom_alloc_array(maxObjectPtr->atomListSize,
+                     &numAllocatedAtoms,
+                     &(maxObjectPtr->atomList),
+                     &memoryWasAllocated);
+    
     
     setMaxObjectOutletType(maxObjectPtr, argc, argv);
     //--------------------------------------------------------------------------
@@ -165,7 +171,20 @@ void inletAssistant(MaxExternalObject* maxObjectPtr,
 /// @param maxObjectPtr object pointer
 void onBang(MaxExternalObject* maxObjectPtr)
 {
-    post("I got a bang!\n");
+    switch (maxObjectPtr->outletType)
+    {
+        case A_LONG:
+            atom_setlong(maxObjectPtr->atomList, 49);
+            break;
+        case A_FLOAT:
+            atom_setfloat(maxObjectPtr->atomList, 3.14159);
+            break;
+        case A_SYM:
+            atom_setsym(maxObjectPtr->atomList, gensym("hello"));
+            break;
+        default:
+            break;
+    }
 }
 
 /// This gets called when we receive a float
@@ -177,6 +196,8 @@ void onFloat(MaxExternalObject* maxObjectPtr, double floatIn)
 }
 //------------------------------------------------------------------------------
 
+
+
 /// This gets called when a list is sent to the object
 /// @param maxObjectPtr object pointer
 /// @param s message selector contains the text of a message and a pointer to the message object
@@ -187,20 +208,42 @@ void onList(MaxExternalObject* maxObjectPtr,
             short argc,
             t_atom *argv)
 {
+    int numAtoms = 0;
+    
     switch (maxObjectPtr->outletType)
     {
         case A_LONG:
-            outlet_int(maxObjectPtr->mainOutlet, bytesToInt(argc, argv, false));
+            for (int i = 0, j = 0; i < argc; i+=4, ++j)
+            {
+                if((argc - i) < 4)
+                    break;
+                atom_setlong(maxObjectPtr->atomList + j,
+                             bytesToInt(4, argv + i, maxObjectPtr->isLittleEndian));
+//                outlet_int(maxObjectPtr->mainOutlet, bytesToInt(4, argv + i, false));
+                numAtoms++;
+            }
             break;
         case A_FLOAT:
-            outlet_float(maxObjectPtr->mainOutlet, bytesToFloat(argc, argv, false));
+            for (int i = 0, j = 0; i < argc; i+=4, ++j)
+            {
+                if((argc - i) < 4)
+                    break;
+                atom_setfloat(maxObjectPtr->atomList + j,
+                              bytesToFloat(4, argv + i, maxObjectPtr->isLittleEndian));
+                numAtoms++;
+//                outlet_float(maxObjectPtr->mainOutlet, bytesToFloat(argc, argv, false));
+            }
             break;
         case A_SYM:
-            outlet_anything(maxObjectPtr->mainOutlet, bytesToSymbol(argc, argv), 0, NULL);
+//            outlet_anything(maxObjectPtr->mainOutlet, bytesToSymbol(argc, argv), 0, NULL);
+            atom_setsym(maxObjectPtr->atomList, bytesToSymbol(argc, argv));
+            numAtoms++;
             break;
         default:
             break;
     }
+    
+    outlet_list(maxObjectPtr->mainOutlet, NULL, numAtoms, maxObjectPtr->atomList);
 }
 
 //------------------------------------------------------------------------------
