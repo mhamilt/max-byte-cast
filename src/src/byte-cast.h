@@ -18,7 +18,7 @@
 /// @param argv <#argv description#>
 t_symbol* bytesToSymbol(short argc, t_atom* argv)
 {
-    const size_t maxLength = 100;
+    const size_t maxLength = 400;
     char text[maxLength];
     
     int length = (argc >= maxLength) ? maxLength-1 : argc;

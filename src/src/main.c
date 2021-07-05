@@ -35,6 +35,19 @@
 /// myExternClass = c;
 void* myExternClass;
 
+typedef enum _OutletDataType
+{
+    INT16_OUT,
+    UINT16_OUT,
+    INT32_OUT,
+    UINT32_OUT,
+    FLOAT_OUT,
+    STRING_OUT,
+    UNSIGNED_OUT,
+    INVALID_OUT,
+    UNKNOWN_OUT
+}OutletDataType;
+
 //------------------------------------------------------------------------------
 /** @struct
  The MaxMSP object
@@ -48,39 +61,13 @@ typedef struct _MaxExternalObject
     void*  mainOutlet;
     short  inletConnection;
     double gain;
-    e_max_atomtypes outletType;
+    OutletDataType outletType;
     bool isLittleEndian;
     
 } MaxExternalObject;
 
-void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *argv)
-{
-    if (argc)
-    {
-        t_atom* argument = &argv[0];
-        t_symbol* outletType = atom_getsym(argument);
-        
-        if (outletType == gensym("s"))
-        {
-            maxObjectPtr->outletType = A_SYM;
-        }
-        else if (outletType == gensym("f"))
-        {
-            maxObjectPtr->outletType = A_FLOAT;
-        }
-        else if (outletType == gensym("i"))
-        {
-            maxObjectPtr->outletType = A_LONG;
-        }
-        else
-        {
-            post("not a valid type");
-            maxObjectPtr->outletType = A_NOTHING;
-        }
-        maxObjectPtr->mainOutlet = listout(maxObjectPtr);
+void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *argv);
 
-    }
-}
 //------------------------------------------------------------------------------
 /// External Object Constructor: use this to setup any variables / properties of your DSP Struct or MaxExternalObject
 /// Arguement list should be as long as the list of type arguments passed in the class_new call below.
@@ -90,10 +77,12 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 {
     //--------------------------------------------------------------------------
     MaxExternalObject* maxObjectPtr = (MaxExternalObject*)object_alloc(myExternClass);
+    //--------------------------------------------------------------------------
+    intin(maxObjectPtr, 1);
     maxObjectPtr->atomList = NULL;
     maxObjectPtr->atomListSize = 100;
     maxObjectPtr->isLittleEndian = false;
-
+    
     long numAllocatedAtoms;
     char memoryWasAllocated;
     
@@ -105,7 +94,6 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
     
     setMaxObjectOutletType(maxObjectPtr, argc, argv);
     //--------------------------------------------------------------------------
-    
     return maxObjectPtr;
 }
 
@@ -171,20 +159,7 @@ void inletAssistant(MaxExternalObject* maxObjectPtr,
 /// @param maxObjectPtr object pointer
 void onBang(MaxExternalObject* maxObjectPtr)
 {
-    switch (maxObjectPtr->outletType)
-    {
-        case A_LONG:
-            atom_setlong(maxObjectPtr->atomList, 49);
-            break;
-        case A_FLOAT:
-            atom_setfloat(maxObjectPtr->atomList, 3.14159);
-            break;
-        case A_SYM:
-            atom_setsym(maxObjectPtr->atomList, gensym("hello"));
-            break;
-        default:
-            break;
-    }
+    
 }
 
 /// This gets called when we receive a float
@@ -194,9 +169,8 @@ void onFloat(MaxExternalObject* maxObjectPtr, double floatIn)
 {
     maxObjectPtr->gain = floatIn;
 }
+
 //------------------------------------------------------------------------------
-
-
 
 /// This gets called when a list is sent to the object
 /// @param maxObjectPtr object pointer
@@ -209,21 +183,37 @@ void onList(MaxExternalObject* maxObjectPtr,
             t_atom *argv)
 {
     int numAtoms = 0;
+    size_t dataSize = 4;
     
     switch (maxObjectPtr->outletType)
     {
-        case A_LONG:
-            for (int i = 0, j = 0; i < argc; i+=4, ++j)
+        case INT16_OUT:
+            dataSize = 2;
+        case INT32_OUT:
+            for (int i = 0, j = 0; i < argc; i+=dataSize, ++j)
             {
-                if((argc - i) < 4)
+                if((argc - i) < dataSize)
                     break;
                 atom_setlong(maxObjectPtr->atomList + j,
-                             bytesToInt(4, argv + i, maxObjectPtr->isLittleEndian));
-//                outlet_int(maxObjectPtr->mainOutlet, bytesToInt(4, argv + i, false));
+                             bytesToInt(dataSize, argv + i, maxObjectPtr->isLittleEndian));
                 numAtoms++;
             }
             break;
-        case A_FLOAT:
+            
+        case UINT16_OUT:
+            dataSize = 2;
+        case UINT32_OUT:
+            for (int i = 0, j = 0; i < argc; i += dataSize, ++j)
+            {
+                if((argc - i) < dataSize)
+                    break;
+                atom_setlong(maxObjectPtr->atomList + j,
+                             bytesToUInt(dataSize, argv + i, maxObjectPtr->isLittleEndian));
+                numAtoms++;
+            }
+            break;
+            
+        case FLOAT_OUT:
             for (int i = 0, j = 0; i < argc; i+=4, ++j)
             {
                 if((argc - i) < 4)
@@ -231,17 +221,19 @@ void onList(MaxExternalObject* maxObjectPtr,
                 atom_setfloat(maxObjectPtr->atomList + j,
                               bytesToFloat(4, argv + i, maxObjectPtr->isLittleEndian));
                 numAtoms++;
-//                outlet_float(maxObjectPtr->mainOutlet, bytesToFloat(argc, argv, false));
             }
             break;
-        case A_SYM:
-//            outlet_anything(maxObjectPtr->mainOutlet, bytesToSymbol(argc, argv), 0, NULL);
+            
+        case STRING_OUT:
             atom_setsym(maxObjectPtr->atomList, bytesToSymbol(argc, argv));
             numAtoms++;
             break;
+            
         default:
             break;
     }
+    
+    
     
     outlet_list(maxObjectPtr->mainOutlet, NULL, numAtoms, maxObjectPtr->atomList);
 }
@@ -266,6 +258,10 @@ void onAnyMessage(MaxExternalObject* maxObjectPtr, t_symbol *s, long argc, t_ato
                 "This method was invoked by sending the ’%s’ message to this object.",
                 s->s_name);
 }
+void toggleEndianness(MaxExternalObject *maxObjectPtr, long n)
+{
+    maxObjectPtr->isLittleEndian = (bool)n;
+}
 
 //------------------------------------------------------------------------------
 /// Bundle all class_addmethod calls into one function.
@@ -278,6 +274,7 @@ void coupleMethodsToExternal( t_class* c)
     class_addmethod(c, (method)inletAssistant,"assist", A_CANT,0);
     class_addmethod(c, (method)onPrintMessage, "print", 0);
     class_addmethod(c, (method)onAnyMessage, "anything", A_GIMME, 0);
+    class_addmethod(c, (method)toggleEndianness, "in1", A_LONG, 0);
 }
 //------------------------------------------------------------------------------
 int C74_EXPORT main(void)
@@ -300,3 +297,61 @@ int C74_EXPORT main(void)
 }
 //------------------------------------------------------------------------------
 
+
+void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *argv)
+{
+    if (argc)
+    {
+        t_atom* argument = &argv[0];
+        t_symbol* outletType = atom_getsym(argument);
+        maxObjectPtr->outletType = UNKNOWN_OUT;
+        
+        long argumentStringLength = strlen(outletType->s_name);
+        const char* argumentString = outletType->s_name;
+        short currIndex = 0;
+        bool isUnsigned = false;
+        
+        if (argumentString[currIndex] == 'u')
+        {
+            isUnsigned = true;
+            currIndex++;
+        }
+                
+            if(argumentString[currIndex] == 'i')
+                maxObjectPtr->outletType = (isUnsigned)?UINT32_OUT:INT32_OUT;
+            else if (argumentString[currIndex] == 'h')
+                maxObjectPtr->outletType = (isUnsigned)?UINT16_OUT:INT16_OUT;
+            else if(argumentString[currIndex] == 'f')
+                maxObjectPtr->outletType = FLOAT_OUT;
+            else if(argumentString[currIndex] == 's')
+                maxObjectPtr->outletType = STRING_OUT;
+        
+        currIndex++;
+        
+        if(currIndex < argumentStringLength)
+        {
+            if (argumentString[currIndex] == '<')
+                maxObjectPtr->isLittleEndian = true;
+            else if (argumentString[currIndex] == '>')
+                maxObjectPtr->isLittleEndian = false;
+            else
+                maxObjectPtr->outletType = UNKNOWN_OUT;
+            
+            currIndex++;
+        }
+        
+        if(currIndex < argumentStringLength)
+            maxObjectPtr->outletType = UNKNOWN_OUT;
+        
+        if (maxObjectPtr->outletType == UNKNOWN_OUT)
+        {
+            object_post((t_object*)maxObjectPtr,
+                        "%s is not a valid format",
+                        outletType->s_name);
+            maxObjectPtr->outletType = INVALID_OUT;
+        }
+        
+        maxObjectPtr->mainOutlet = listout(maxObjectPtr);
+        
+    }
+}
