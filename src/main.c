@@ -43,6 +43,7 @@ typedef enum _OutletDataType
     UINT16_OUT,
     INT32_OUT,
     UINT32_OUT,
+    INT64_OUT,
     FLOAT_OUT,
     STRING_OUT,
     UNSIGNED_OUT,
@@ -241,6 +242,7 @@ void onList(MaxExternalObject* maxObjectPtr,
                 numAtoms++;
             }
             break;
+                    
         default:
             break;
     }

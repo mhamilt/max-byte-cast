@@ -5,7 +5,7 @@ byte-cast is a MaxMSP utility object for casting a list of bytes to other data f
 
 ## Install
 
-[Un-zip the package folder](https://github.com/mhamilt/max-byte-cast/releases/download/0.1-alpha.1/byte-cast.zip) into you `~/Documents/Max 8/Packages` directory.
+[Unzip the package folder](https://github.com/mhamilt/max-byte-cast/releases/download/0.1-alpha.1/byte-cast.zip) into you `~/Documents/Max 8/Packages` directory.
 
 ## Usage
 
