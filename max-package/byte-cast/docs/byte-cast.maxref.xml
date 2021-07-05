@@ -35,15 +35,15 @@
 
   <inletlist>
     <inlet id="0" type="list">
-      <digest></digest>
-      <description></description>
+      <digest>List</digest>
+      <description>list of bytes to cast</description>
     </inlet>
   </inletlist>
 
   <outletlist>
     <outlet id="0" type="list">
-      <digest></digest>
-      <description></description>
+      <digest>List Data</digest>
+      <description>Byte data cast to specified format. If multiple bytes worth of data is provided, mutliple values will be output. Incomplete data will be ignored.</description>
     </outlet>
   </outletlist>
 
