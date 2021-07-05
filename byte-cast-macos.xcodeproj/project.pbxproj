@@ -7,17 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		58567A42242A0A0A00271066 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 58567A39242A0A0A00271066 /* main.c */; };
-		588B520A2691E75B00935F2C /* byte-cast.c in Sources */ = {isa = PBXBuildFile; fileRef = 588B52082691E75B00935F2C /* byte-cast.c */; };
+		58D6A7B526932CCA00389B24 /* byte-cast.c in Sources */ = {isa = PBXBuildFile; fileRef = 58D6A7B226932CCA00389B24 /* byte-cast.c */; };
+		58D6A7B626932CCA00389B24 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 58D6A7B426932CCA00389B24 /* main.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		2FBBEAE508F335360078DB84 /* byte-cast.mxo */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "byte-cast.mxo"; sourceTree = BUILT_PRODUCTS_DIR; };
-		58567A39242A0A0A00271066 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = maxmspsdk.xcconfig; sourceTree = "<group>"; };
-		588B52082691E75B00935F2C /* byte-cast.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = "byte-cast.c"; sourceTree = "<group>"; };
-		588B52092691E75B00935F2C /* byte-cast.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "byte-cast.h"; sourceTree = "<group>"; };
 		589B7F5E2691055100D386C4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		58D6A7B226932CCA00389B24 /* byte-cast.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "byte-cast.c"; sourceTree = "<group>"; };
+		58D6A7B326932CCA00389B24 /* byte-cast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "byte-cast.h"; sourceTree = "<group>"; };
+		58D6A7B426932CCA00389B24 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -41,19 +41,11 @@
 		58567A37242A0A0A00271066 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				58D6A7B226932CCA00389B24 /* byte-cast.c */,
+				58D6A7B326932CCA00389B24 /* byte-cast.h */,
+				58D6A7B426932CCA00389B24 /* main.c */,
 				589B7F5E2691055100D386C4 /* Info.plist */,
 				5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */,
-				58567A38242A0A0A00271066 /* src */,
-			);
-			path = src;
-			sourceTree = "<group>";
-		};
-		58567A38242A0A0A00271066 /* src */ = {
-			isa = PBXGroup;
-			children = (
-				58567A39242A0A0A00271066 /* main.c */,
-				588B52082691E75B00935F2C /* byte-cast.c */,
-				588B52092691E75B00935F2C /* byte-cast.h */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -159,8 +151,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				588B520A2691E75B00935F2C /* byte-cast.c in Sources */,
-				58567A42242A0A0A00271066 /* main.c in Sources */,
+				58D6A7B626932CCA00389B24 /* main.c in Sources */,
+				58D6A7B526932CCA00389B24 /* byte-cast.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -170,7 +162,7 @@
 		2FBBEAD008F335010078DB84 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -185,7 +177,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -206,7 +198,7 @@
 		2FBBEAD108F335010078DB84 /* Deployment */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -221,7 +213,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = NO;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -241,7 +233,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				C74_SYM_LINKER_FLAGS = "@$(C74SUPPORT)/max-includes/c74_linker_flags.txt\"";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -256,8 +248,8 @@
 					JitterAPI,
 					"$(C74_SYM_LINKER_FLAGS)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.${PRODUCT_NAME:rfc1034identifier}";
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Development;
 		};
@@ -265,7 +257,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5868BA8D241A6C1600152060 /* maxmspsdk.xcconfig */;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = YES;
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				C74_SYM_LINKER_FLAGS = "@$(C74SUPPORT)/max-includes/c74_linker_flags.txt\"";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
@@ -279,8 +271,8 @@
 					JitterAPI,
 					"$(C74_SYM_LINKER_FLAGS)",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.${PRODUCT_NAME:rfc1034identifier}";
 				SDKROOT = macosx;
+				VALID_ARCHS = x86_64;
 			};
 			name = Deployment;
 		};
