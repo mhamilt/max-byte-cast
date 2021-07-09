@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D7D2B050-0FAC-4326-89AD-C82254541416}</ProjectGuid>
-    <ProjectName>maxmsp-external-template</ProjectName>
+    <ProjectName>byte-cast</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -267,10 +267,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="$(C74SUPPORT)\max-includes\common\dllmain_win.c" />
-    <ClCompile Include="..\src\mymspextern\main.c" />
+    <ClCompile Include="..\src\byte-cast.c" />
+    <ClCompile Include="..\src\main.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="max_extern_common.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\byte-cast.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

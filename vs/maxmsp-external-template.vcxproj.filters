@@ -2,7 +2,10 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="$(C74SUPPORT)\max-includes\common\dllmain_win.c" />
-    <ClCompile Include="..\src\mymspextern\main.c">
+    <ClCompile Include="..\src\byte-cast.c">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\main.c">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -13,5 +16,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="max_extern_common.props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\byte-cast.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
