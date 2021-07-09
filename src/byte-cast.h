@@ -13,15 +13,15 @@
 #include "ext_obex.h"
 #include "buffer.h"
 //------------------------------------------------------------------------------
+#define MaxAtomLength 400
 /// <#Description#>
 /// @param argc <#argc description#>
 /// @param argv <#argv description#>
 t_symbol* bytesToSymbol(short argc, t_atom* argv)
 {
-    const size_t maxLength = 400;
-    char text[maxLength];
+    char text[MaxAtomLength];
     
-    int length = (argc >= maxLength) ? maxLength-1 : argc;
+    int length = (argc >= MaxAtomLength) ? MaxAtomLength-1 : argc;
     
     for (int i = 0; i < length; i++)
     {
