@@ -17,7 +17,7 @@ PRODUCT_VERSION = 7.1.0
 //PRODUCT_VERSION = 8.0.3
 ARCHS = i386 x86_64
 
-PRODUCT_BUNDLE_IDENTIFIER = com.mhamilt.${PRODUCT_NAME:rfc1034identifier}
+PRODUCT_BUNDLE_IDENTIFIER = com.mhamilt.byte-cast
 
 // Paths
 C74SUPPORT = max-sdk/source/c74support

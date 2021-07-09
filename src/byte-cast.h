@@ -144,7 +144,26 @@ float bytesToFloat  (short argc, t_atom* argv, bool littleEndian)
     return *((float*)bytes);
 }
 
-
+//------------------------------------------------------------------------------
+/// <#Description#>
+/// @param argc <#argc description#>
+/// @param argv <#argv description#>
+double bytesToDouble  (short argc, t_atom* argv, bool littleEndian)
+{
+    uint8_t bytes[8];
+    
+    if(littleEndian)
+    {
+        for (int i = 0 ; i < 8; ++i) // little endian
+            bytes[i] = (atom_getlong (argv + i) & 0xFF);
+    }
+    else
+    {
+        for (int i = 0 ; i < 8; ++i)
+            bytes[i] = (atom_getlong (argv + (argc - 1) - i) & 0xFF);
+    }
+    return *((double*)bytes);
+}
 //------------------------------------------------------------------------------
 
 #endif /* byte_cast_hpp */
