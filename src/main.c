@@ -23,6 +23,7 @@
  (e.g. uh< unsigned 16-bit int little endian)
  
  */
+#include <stdint.h>
 #include "ext.h"
 #include "ext_obex.h"
 #include "buffer.h"
