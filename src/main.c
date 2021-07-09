@@ -45,6 +45,7 @@ typedef enum _OutletDataType
     UINT32_OUT,
     INT64_OUT,
     FLOAT_OUT,
+    DOUBLE_OUT,
     STRING_OUT,
     UNSIGNED_OUT,
     INVALID_OUT,
@@ -105,6 +106,7 @@ void* myExternalConstructor(t_symbol *s, long argc, t_atom *argv)
 void myExternDestructor(MaxExternalObject* maxObjectPtr)
 {
 }
+
 //------------------------------------------------------------------------------
 
 /// @brief This is the function called by MAX/MSP when the cursor is over an inlet or
@@ -165,17 +167,6 @@ void onBang(MaxExternalObject* maxObjectPtr)
     
 }
 
-/// This gets called when we receive a float
-/// @param maxObjectPtr object pointer
-/// @param floatIn 
-void onFloat(MaxExternalObject* maxObjectPtr, double floatIn)
-{
-    maxObjectPtr->gain = floatIn;
-}
-
-
-
-
 //------------------------------------------------------------------------------
 
 /// This gets called when a list is sent to the object
@@ -218,7 +209,17 @@ void onList(MaxExternalObject* maxObjectPtr,
                 numAtoms++;
             }
             break;
-            
+        case INT64_OUT:
+            dataSize = 8;
+            for (int i = 0, j = 0; i < argc; i += dataSize, ++j)
+            {
+                if((argc - i) < dataSize)
+                    break;
+                atom_setlong(maxObjectPtr->atomList + j,
+                             bytesToInt(dataSize, argv + i, maxObjectPtr->isLittleEndian));
+                numAtoms++;
+            }
+            break;
         case FLOAT_OUT:
             for (int i = 0, j = 0; i < argc; i+=4, ++j)
             {
@@ -226,6 +227,16 @@ void onList(MaxExternalObject* maxObjectPtr,
                     break;
                 atom_setfloat(maxObjectPtr->atomList + j,
                               bytesToFloat(4, argv + i, maxObjectPtr->isLittleEndian));
+                numAtoms++;
+            }
+            break;
+        case DOUBLE_OUT:
+            for (int i = 0, j = 0; i < argc; i+=8, ++j)
+            {
+                if((argc - i) < 8)
+                    break;
+                atom_setfloat(maxObjectPtr->atomList + j,
+                              bytesToDouble(8, argv + i, maxObjectPtr->isLittleEndian));
                 numAtoms++;
             }
             break;
@@ -238,11 +249,29 @@ void onList(MaxExternalObject* maxObjectPtr,
         case BYTE_OUT:
             for (int i = 0; i < argc; ++i)
             {
-                atom_setlong(maxObjectPtr->atomList + i, atom_getlong(argv + i));
-                numAtoms++;
+                if (atom_gettype(argv + i) == A_FLOAT)
+                {
+                    t_atom_float value = atom_getfloat(argv + i);
+                    uint8_t* rawValue = (uint8_t*)&value;
+                    for (int j = 0; j < sizeof(t_atom_float); ++j)
+                    {
+                        atom_setlong(maxObjectPtr->atomList + numAtoms, rawValue[j]);
+                        numAtoms++;
+                    }
+                }
+                else if (atom_gettype(argv + i) == A_LONG)
+                {
+                    t_atom_long value = atom_getlong(argv + i);
+                    uint8_t* rawValue = (uint8_t*)&value;
+                    for (int j = 0; j < sizeof(t_atom_long); ++j)
+                    {
+                        atom_setlong(maxObjectPtr->atomList + numAtoms, rawValue[j]);
+                        numAtoms++;
+                    }
+                }
             }
             break;
-                    
+            
         default:
             break;
     }
@@ -251,18 +280,22 @@ void onList(MaxExternalObject* maxObjectPtr,
     
     outlet_list(maxObjectPtr->mainOutlet, NULL, numAtoms, maxObjectPtr->atomList);
 }
-
+//------------------------------------------------------------------------------
 void onInt (MaxExternalObject* maxObjectPtr, t_atom_long intIn)
 {
-    uint8_t* bytes = (uint8_t*)&intIn;
-    t_atom byteAtoms[8];
-    
-    for (int i = 0; i < 8; ++i)
-    {
-        t_atom_long byteAsLong = (t_atom_long)bytes[i];
-        atom_setlong(byteAtoms + i, byteAsLong);
-    }
-    onList(maxObjectPtr, NULL, 8, byteAtoms);
+    t_atom longAtom[1];
+    atom_setlong(longAtom, intIn);
+    onList(maxObjectPtr, NULL, 1, longAtom);
+}
+//------------------------------------------------------------------------------
+/// This gets called when we receive a float
+/// @param maxObjectPtr object pointer
+/// @param floatIn
+void onFloat(MaxExternalObject* maxObjectPtr, double floatIn)
+{
+    t_atom floatAtom[1];
+    atom_setfloat(floatAtom, floatIn);
+    onList(maxObjectPtr, NULL, 1, floatAtom);
 }
 
 //------------------------------------------------------------------------------
@@ -338,19 +371,30 @@ void setMaxObjectOutletType(MaxExternalObject* maxObjectPtr, long argc, t_atom *
         const char* argumentString = outletType->s_name;
         short currIndex = 0;
         bool isUnsigned = false;
+        bool isLong = false;
         
         if (argumentString[currIndex] == 'u')
         {
             isUnsigned = true;
             currIndex++;
         }
+        else if (argumentString[currIndex] == 'l')
+        {
+            isLong = true;
+            currIndex++;
+        }
         
-        if(argumentString[currIndex] == 'i')
-            maxObjectPtr->outletType = (isUnsigned)?UINT32_OUT:INT32_OUT;
+        if(argumentString[currIndex] == 'i' || argumentString[currIndex] == 'd')
+            if (isLong)
+                maxObjectPtr->outletType = INT64_OUT;
+            else if (isUnsigned)
+                maxObjectPtr->outletType = UINT32_OUT;
+            else
+                maxObjectPtr->outletType = INT32_OUT;
         else if (argumentString[currIndex] == 'h')
             maxObjectPtr->outletType = (isUnsigned)?UINT16_OUT:INT16_OUT;
         else if(argumentString[currIndex] == 'f')
-            maxObjectPtr->outletType = FLOAT_OUT;
+            maxObjectPtr->outletType = (isLong) ? DOUBLE_OUT : FLOAT_OUT;
         else if(argumentString[currIndex] == 's')
             maxObjectPtr->outletType = STRING_OUT;
         else if(argumentString[currIndex] == 'b')

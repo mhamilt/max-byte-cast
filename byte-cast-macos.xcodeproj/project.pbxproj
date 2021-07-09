@@ -125,7 +125,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "codesign --force --deep -s \"Developer ID Application: Matthew Hamilton (XZ388CS8AV)\" \"${DSTROOT}/${WRAPPER_NAME}\"\necho $WRAPPER_NAME\ncd \"${DSTROOT}/../../\"\nzip -r byte-cast.zip byte-cast -x \"*.DS_Store\"\ncp -r \"${DSTROOT}/../../byte-cast\" \"${HOME}/Documents/Max 8/Packages\"\n";
+			shellScript = "codesign --force --deep -s \"Developer ID Application: Matthew Hamilton (XZ388CS8AV)\" \"${DSTROOT}/${WRAPPER_NAME}\"\necho $WRAPPER_NAME\ncd \"${DSTROOT}/../../\"\nzip -r byte-cast.zip byte-cast -x \"*.DS_Store\"\ncp -r \"byte-cast\" \"${HOME}/Documents/Max 8/Packages\"\n";
 		};
 		589FD427242A26FE00C7C9DC /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
