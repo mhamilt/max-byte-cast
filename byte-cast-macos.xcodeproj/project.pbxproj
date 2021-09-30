@@ -142,7 +142,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nif [[ ! \"$(ls -A max-sdk)\" ]]; then git submodule update --init;fi\n\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n\nif [[ ! \"$(ls -A max-sdk-base)\" ]]; then git submodule update --init;fi\n\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
