@@ -17,7 +17,7 @@ PRODUCT_VERSION = 7.1.0
 //PRODUCT_VERSION = 8.0.3
 ARCHS = i386 x86_64
 
-PRODUCT_BUNDLE_IDENTIFIER = com.mhamilt.byte-cast
+PRODUCT_BUNDLE_IDENTIFIER = com.cycling74.byte-cast
 
 // Paths
 C74SUPPORT = max-sdk-base/c74support
@@ -34,7 +34,7 @@ INFOPLIST_FILE = src/Info.plist
 
 
 // Architecture and Deployment
-ARCHS = x86_64
+ARCHS = $(ARCHS_STANDARD)
 
 // The following section sets the Mac SDK version to be used.
 // For most projects this has little to no impact because there are no direct dependencies on OS function calls.
