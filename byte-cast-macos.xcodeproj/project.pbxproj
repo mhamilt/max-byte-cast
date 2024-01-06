@@ -248,8 +248,8 @@
 					JitterAPI,
 					"$(C74_SYM_LINKER_FLAGS)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.byte-cast";
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
 			};
 			name = Development;
 		};
@@ -271,8 +271,8 @@
 					JitterAPI,
 					"$(C74_SYM_LINKER_FLAGS)",
 				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cycling74.byte-cast";
 				SDKROOT = macosx;
-				VALID_ARCHS = x86_64;
 			};
 			name = Deployment;
 		};
